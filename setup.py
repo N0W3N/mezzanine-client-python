@@ -25,13 +25,14 @@ if sys.argv[-1] == 'publish':
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     print("You probably want to also tag the version now:")
-    print("  git tag -a {0} -m 'version {0}'".format(version))
+    print(f"  git tag -a {version} -m 'version {version}'")
     print("  git push --tags")
     shutil.rmtree('dist')
     shutil.rmtree('build')
     shutil.rmtree('mezzanine_client.egg-info')
     sys.exit()
 
+# TODO: change information in setup()
 
 setup(
     name='mezzanine-client',

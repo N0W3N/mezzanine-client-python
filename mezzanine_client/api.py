@@ -53,7 +53,7 @@ class MezzanineCore(object):
 
         # API URLs
         self.api_url = api_url or settings.api_url or 'http://127.0.0.1:8000/api'
-        self.auth_url = self.api_url + '/oauth2/authorize'
+        self.auth_url = self.api_url + '/waoauth2/authorize'
         self.token_url = self.api_url + '/oauth2/token/'
         self.refresh_url = self.token_url
 
@@ -67,7 +67,7 @@ class MezzanineCore(object):
         # Authenticate
         if not refresh_token:
             authorization_url, state = self.session.authorization_url(self.auth_url)
-            print("Please click to authorize this app: {}".format(authorization_url))
+            print(f"Please click to authorize this app: {authorization_url}")
             code = input("Paste the authorization code (args > code) from your browser here: ").strip()
 
             # Fetch the access token
@@ -112,7 +112,7 @@ class MezzanineCore(object):
         Concatenate given endpoint resource with API URL
         """
         args = map(str, args)
-        return '/'.join([self.api_url] + list(args))
+        return ('/'.join([self.api_url] + list(args)))
 
     def _api_resource(self, method, resource, params=None, data=None):
         """
@@ -173,7 +173,8 @@ class Mezzanine(MezzanineCore):
         :param date_min: minimum date published (e.g. `2018-01-01`)
         :return: list of dicts for most recently published blog posts
         """
-        return self._get(['posts?offset={}&limit={}&category_name={}&date_min={}'.format(int(offset), int(limit), category_name, date_min)])['results']
+        return self._get([f'posts?offset={int(offset)}&limit={int(limit)}&category_name={category_name}'
+                          f'&date_min={date_min})'])['results']
 
     def create_post(self, data):
         """
@@ -198,7 +199,7 @@ class Mezzanine(MezzanineCore):
         :param limit: pagination limit
         :return: list of dicts for pages
         """
-        return self._get(['pages?offset={}&limit={}'.format(int(offset), int(limit))])['results']
+        return self._get([f'pages?offset={(int(offset))}&limit={int(limit)}'])['results']
 
     def get_user(self, item_id):
         """
@@ -215,7 +216,7 @@ class Mezzanine(MezzanineCore):
         :param limit: pagination limit
         :return: list of dicts for users
         """
-        return self._get(['users?offset={}&limit={}'.format(int(offset), int(limit))])['results']
+        return self._get([f'users?offset={(int(offset))}&limit={int(limit)}'])['results']
 
     def get_category(self, item_id):
         """
@@ -232,7 +233,7 @@ class Mezzanine(MezzanineCore):
         :param limit: pagination limit
         :return: list of dicts for categories
         """
-        return self._get(['categories?offset={}&limit={}'.format(int(offset), int(limit))])['results']
+        return self._get([f'categories?offset={int(offset)}&limit={int(limit)}'])['results']
 
     def get_site(self):
         """

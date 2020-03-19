@@ -37,7 +37,7 @@ def client(ctx, version):
         return
 
     if version:
-        click.echo('mezzanine-client version {}'.format(mezzanine_client.__version__))
+        click.echo(f'mezzanine-client version {mezzanine_client.__version__}')
     else:
         click.echo(ctx.get_help())
 
@@ -48,7 +48,7 @@ def logout():
     if os.path.exists(filename):
         os.remove(filename)
 
-    click.echo('You have been logged out.')
+    click.echo('You have been logged out and the stored credentials were cleared. Please reconfigure CLI before using it again')
 
 
 @click.group(help="Create or show blog posts.")
@@ -77,7 +77,7 @@ def posts_get(id):
     try:
         post = api.get_post(int(id))
     except (requests.exceptions.HTTPError, ValueError):
-        click.echo(click.style(u'Post "{0}" does not exist.'.format(id), fg='red'))
+        click.echo(click.style(f'Post "{id}" does not exist.', fg='red'))
         return
 
     click.echo(json.dumps(post, indent=4, ensure_ascii=False))
@@ -103,10 +103,13 @@ def posts_create(title, content, content_file, categories, publish_date, markdow
             file = open(os.path.expanduser(content_file), 'r')
             content = file.read()
         except (IOError, OSError) as e:
-            raise MezzanineCLIError('Could not read file specified in `--content-file` parameter! "{}".'.format(e))
-
-        if not title or not content:
-            raise MezzanineCLIError('Please specify `--title` and `--content` options!')
+            raise MezzanineCLIError(f'Could not read file specified in `--content-file` parameter! "{e}".')
+        if not title:
+            raise MezzanineCLIError('Please specify `--title`!')
+        if not content:
+            raise MezzanineCLIError('Please specify `--content`!')
+        if not content and title:
+            raise MezzanineCLIError('Please specify `--content` and `--title`!')
 
     # Strip any whitespace from beginning and end of string.
     content = content.strip()
@@ -145,7 +148,7 @@ def posts_create(title, content, content_file, categories, publish_date, markdow
     except requests.exceptions.HTTPError as e:
         raise MezzanineCLIError('Check `--title` and `--content` options were correctly provided!'
                                 'Add `--help` to your command for available options.'
-                                '\nDetails: "{}".'.format(e))
+                                f'\nDetails: "{e}".')
 
     # If request was successful, print confirmation.
     if 'id' in response:
@@ -188,7 +191,7 @@ def config(key=None, value=None):
 
             # Print header.
             if found:
-                click.secho('# {}'.format(parser_desc[name]), fg='green', bold=True)
+                click.secho(f'# {parser_desc[name]}', fg='green', bold=True)
 
             # Iterate over each option in the parser and print the first instance of each option found.
             for option in parser.options('general'):
@@ -204,7 +207,7 @@ def config(key=None, value=None):
 
     # Abort if invalid option found.
     if not hasattr(settings, key):
-        raise MezzanineCLIError('Invalid configuration option "{}".'.format(key))
+        raise MezzanineCLIError(f'Invalid configuration option "{key}".')
 
     # If only a key is provided, print its value.
     if key and not value:
@@ -226,7 +229,7 @@ def show_setting(key):
     Display a setting in the CLI.
     """
     value = getattr(settings, key)
-    click.secho('{}: '.format(key), fg='magenta', bold=True, nl=False)
+    click.secho(f'{key}: ', fg='magenta', bold=True, nl=False)
     click.secho(str(value), bold=True, fg='white' if isinstance(value, str) else 'cyan')
 
 

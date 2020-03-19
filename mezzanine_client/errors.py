@@ -7,7 +7,7 @@ class MezzanineCLIError(click.ClickException):
     """
 
     def show(self, file=None):
-        click.secho('Error: {}'.format(self.format_message()), file=file, fg='red', bg=None, bold=True)
+        click.secho(f'Error: {self.format_message()}', file=file, fg='red', bg=None, bold=True)
 
 
 class MezzanineValueError(ValueError):

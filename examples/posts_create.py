@@ -40,6 +40,9 @@ blog_post_data = {'title': title,
 
 # Publish new blog article via POST to API
 response = api.create_post(blog_post_data)
+post_id = response['id']
 pprint.pprint(response)
 if 'id' in response:
-    print(str_green('Blog post successfully published with ID #{}'.format(response['id'])))
+    print(str_green(f'Blog post successfully published with ID #{post_id}'))
+
+# TODO nothing to do here for the moment

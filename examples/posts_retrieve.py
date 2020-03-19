@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# TODO change information
+
 """
 Mezzanine Client Example: Retrieve a blog post
 
@@ -18,6 +20,7 @@ import sys
 from mezzanine_client import Mezzanine
 from mezzanine_client.utils import str_header, str_blue
 
+# TODO reformat display_post() print statements
 
 # Retrieve and display specified blog post
 def display_post(post_id):

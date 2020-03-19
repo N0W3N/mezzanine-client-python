@@ -73,15 +73,17 @@ class Settings(object):
             return self._cache[key]
 
         # Raise an exception when the attribute was not found and also there is no default.
-        raise AttributeError('The setting `{}` does not exist!'.format(key.lower()))
+        raise AttributeError(f'The setting `{key.lower()}` does not exist!')
 
     @property
     def get_parsers(self):
         """
         Return a tuple of all parsers in order of precedence.
         """
-        return tuple([getattr(self, '_{}'.format(i)) for i in self.parsers_available])
+        return tuple([getattr(self, f'_{(i for i in self.parsers_available)}')])
 
 
 # Construct the `settings` object.
 settings = Settings()
+
+# TODO nothing to do here for the moment
